@@ -6,11 +6,37 @@ import { CiUser } from "react-icons/ci";
 import { CiBookmark } from "react-icons/ci";
 import { CiLogout } from "react-icons/ci";
 import { Link } from 'react-router-dom';
-
-
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { USER_API_END_POINT } from '../utils/constant';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { getMyProfile, getOtherUsers, getUser } from '../redux/userSlice';
 
 
 function LeftSidebar() {
+
+    const {user} = useSelector(store => store.user)
+    const navigate = useNavigate()
+    const dispatch = useDispatch();
+
+    const logoutHandler =  async () =>{
+        try {
+            const res  = await axios.get(`${USER_API_END_POINT}/logout`,{
+                withCredentials:true
+            })
+            dispatch(getUser(null));
+            dispatch(getOtherUsers(null));
+            dispatch(getMyProfile(null));
+            navigate('/login');
+            console.log(res);
+            toast.success(res.data.message);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
     return (
         <div className='w-[20%]'>
             <div>
@@ -36,7 +62,7 @@ function LeftSidebar() {
                         </div>
                         <h1 className='font-bold txt-lg ml-2'>Notifications</h1>
                     </div>
-                    <Link to="/profile" className=' flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full '>
+                    <Link to={`/profile/${user?._id}` }className=' flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full '>
                         <div>
                             <CiUser size="24px"/>
                         </div>
@@ -48,7 +74,7 @@ function LeftSidebar() {
                         </div>
                         <h1 className='font-bold txt-lg ml-2'>Bookmarks</h1>
                     </div>
-                    <div className=' flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full '>
+                    <div onClick={logoutHandler} className=' flex items-center my-2 px-4 py-2 hover:bg-gray-200 hover:cursor-pointer rounded-full '>
                         <div>
                             <CiLogout size="24px"/>
                         </div>

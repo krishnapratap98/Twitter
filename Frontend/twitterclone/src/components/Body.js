@@ -16,8 +16,8 @@ function Body() {
                     element: <Feed />
                 },
                {
-                 path:"/profile",
-                element: <Profile />
+                 path:"/profile/:id",
+                element: <Profile/>
                }
             ]
         },

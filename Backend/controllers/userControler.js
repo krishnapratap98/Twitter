@@ -50,7 +50,7 @@ export const Login = async (req, res) => {
                 message: "Incorrect email or password",
                 success: false
             })
-        }
+        } 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(401).json({
@@ -65,6 +65,7 @@ export const Login = async (req, res) => {
         const token = jwt.sign(tokenData, process.env.TOKEN_SECRET, { expiresIn: "1d" })
         return res.status(201).cookie("token", token, { expiresIn: "1d", httpOnly: true }).json({
             message: `Welcome back ${user.name}`,
+            user,
             success: true
         })
     } catch (error) {

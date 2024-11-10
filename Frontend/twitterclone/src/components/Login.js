@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import axios from "axios";
 import { USER_API_END_POINT } from "../utils/constant"
+import { toast } from "react-hot-toast"
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { getUser } from '../redux/userSlice';
 
 function Login() {
   const [islogin, setIsLogin] = useState(true)
@@ -8,26 +12,49 @@ function Login() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const nevigate = useNavigate();
+  const dispatch = useDispatch();
 
   const submitHandler = async (e) => {
     e.preventDefault();
     if (islogin) {
       //login
       try {
-        const res = await axios.post(`${USER_API_END_POINT}/login`, {  email, password });
-        console.log(res);
+        const res = await axios.post(`${USER_API_END_POINT}/login`, { email, password }, {
+          headers: {
+            "Content-Type": "application/json"
+          },
+          withCredentials: true
+        });
+        dispatch(getUser(res?.data?.user));
+        if (res.data.success) {
+          nevigate("/");
+          toast.success(res.data.message);
+        }
 
       } catch (error) {
+        toast.success(error.res.data.message);
         console.log(error);
 
       }
     } else {
       //signup
       try {
-        const res = await axios.post(`${USER_API_END_POINT}/register`, { name, email, username, password });
-        console.log(res);
+        const res = await axios.post(`${USER_API_END_POINT}/register`, { name, email, username, password }, {
+          headers: {
+            "Content-Type": "application/json"
+          },
+          withCredentials: true
+        });
+     
+
+        if (res.data.success) {
+          setIsLogin(true)
+          toast.success(res.data.message);
+        }
 
       } catch (error) {
+        toast.success(error.res.data.message);
         console.log(error);
 
       }
@@ -39,6 +66,8 @@ function Login() {
   const loginSignupHandler = () => {
     setIsLogin(!islogin);
   }
+
+
   return (
     <div className='w-screen h-screen flex items-center justify-center'>
       <div className='flex items-center justify-evenly w-[80%]'>
