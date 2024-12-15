@@ -27,6 +27,7 @@ const corsOptions = {
     credentials: true
 }
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.get("/", (req, res) => {
     return res.send("backend is running")
