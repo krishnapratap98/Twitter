@@ -8,37 +8,41 @@ import cors from "cors";
 
 
 dotenv.config({
-    path:".env"
+    path: ".env"
 })
 const app = express();
 
 // middlewares
 app.use(express.urlencoded({
-    extended:true
+    extended: true
 }))
 app.use(express.json());
 app.use(cookieParser());
 const corsOptions = {
-    origin:"http://localhost:3000",
-    credentials:true
+    origin: ["http://localhost:3000",
+        "https://twitter-git-main-krishnapratap98s-projects.vercel.app/", 
+         "https://twitter-mt1uqnrg8-krishnapratap98s-projects.vercel.app/", 
+         "https://twitter-ten-fawn.vercel.app/"
+    ],
+    credentials: true
 }
 app.use(cors(corsOptions));
 
-app.get("/", (req, res) =>{
+app.get("/", (req, res) => {
     return res.send("backend is running")
 })
-app.get("/token-check", (req, res) =>{
+app.get("/token-check", (req, res) => {
     const token = req.cookies.token;
-    if(token){
+    if (token) {
 
         return res.send(`cookie is set and token=${token}`)
-    }else{
+    } else {
         return res.status(401).send('Unauthorized');
     }
 })
 //api
-app.use("/api/v1/user",userRoute)
-app.use("/api/v1/tweet",tweetRoute)
+app.use("/api/v1/user", userRoute)
+app.use("/api/v1/tweet", tweetRoute)
 
 
 app.listen(process.env.PORT, () => {
