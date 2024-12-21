@@ -14,9 +14,9 @@ const app = express();
 
 const corsOptions = {
     origin: ["http://localhost:3000",
-        "https://twitter-git-main-krishnapratap98s-projects.vercel.app/",
-        "https://twitter-mt1uqnrg8-krishnapratap98s-projects.vercel.app/",
-        "https://twitter-ten-fawn.vercel.app/"
+        "https://twitter-git-main-krishnapratap98s-projects.vercel.app",
+        "https://twitter-mt1uqnrg8-krishnapratap98s-projects.vercel.app",
+        "https://twitter-ten-fawn.vercel.app"
     ],
     credentials: true
 }
