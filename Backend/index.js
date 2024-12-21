@@ -12,22 +12,37 @@ dotenv.config({
 })
 const app = express();
 
+const corsOptions = {
+    origin: ["http://localhost:3000",
+        "https://twitter-git-main-krishnapratap98s-projects.vercel.app/",
+        "https://twitter-mt1uqnrg8-krishnapratap98s-projects.vercel.app/",
+        "https://twitter-ten-fawn.vercel.app/"
+    ],
+    credentials: true
+}
+app.options('*', cors(corsOptions));
+app.use(cors(corsOptions));
+
 // middlewares
 app.use(express.urlencoded({
     extended: true
 }))
 app.use(express.json());
 app.use(cookieParser());
-const corsOptions = {
-    origin: ["http://localhost:3000",
-        "https://twitter-git-main-krishnapratap98s-projects.vercel.app/", 
-         "https://twitter-mt1uqnrg8-krishnapratap98s-projects.vercel.app/", 
-         "https://twitter-ten-fawn.vercel.app/"
-    ],
-    credentials: true
-}
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+// const corsOptions = {
+//     origin: ["http://localhost:3000",
+//         "https://twitter-git-main-krishnapratap98s-projects.vercel.app/",
+//         "https://twitter-mt1uqnrg8-krishnapratap98s-projects.vercel.app/",
+//         "https://twitter-ten-fawn.vercel.app/"
+//     ],
+//     credentials: true
+// }
+// app.use(cors(corsOptions));
+// app.options('*', cors(corsOptions));
+app.use((req, res, next) => {
+    console.log("Request Origin:",req.method, req.path, req.headers.origin);
+    next();
+});
 
 app.get("/", (req, res) => {
     return res.send("backend is running")
